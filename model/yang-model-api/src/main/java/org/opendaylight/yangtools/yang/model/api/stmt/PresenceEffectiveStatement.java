@@ -52,7 +52,7 @@ public interface PresenceEffectiveStatement extends EffectiveStatement<String, @
          * {@return the {@code PresenceEffectiveStatement}}
          * @throws NoSuchElementException if not present
          */
-        default @NonNull PresenceEffectiveStatement getPresenceByStatement() {
+        default @NonNull PresenceEffectiveStatement getPresenceStatement() {
             final var presence = presenceStatement();
             if (presence == null) {
                 throw new NoSuchElementException("No presence statement present in " + this);
