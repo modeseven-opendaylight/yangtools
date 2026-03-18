@@ -13,7 +13,6 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import org.junit.jupiter.api.Test;
 import org.opendaylight.yangtools.yang.common.QNameModule;
 import org.opendaylight.yangtools.yang.model.api.stmt.GroupingEffectiveStatement;
-import org.opendaylight.yangtools.yang.model.api.stmt.KeyEffectiveStatement;
 import org.opendaylight.yangtools.yang.model.api.stmt.ListEffectiveStatement;
 
 class YT1195Test extends AbstractYangTest {
@@ -29,7 +28,6 @@ class YT1195Test extends AbstractYangTest {
         // The statements are instantiated in the same module, hence they should have the same argument
         assertSame(foo.argument(), grpFoo.argument());
         // The statements' key substatement should be reused
-        assertSame(foo.findFirstEffectiveSubstatement(KeyEffectiveStatement.class).orElseThrow(),
-            grpFoo.findFirstEffectiveSubstatement(KeyEffectiveStatement.class).orElseThrow());
+        assertSame(foo.getKeyStatement(), grpFoo.getKeyStatement());
     }
 }

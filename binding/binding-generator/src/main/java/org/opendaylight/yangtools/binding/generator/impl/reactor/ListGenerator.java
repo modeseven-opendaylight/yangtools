@@ -24,7 +24,6 @@ import org.opendaylight.yangtools.binding.runtime.api.KeyRuntimeType;
 import org.opendaylight.yangtools.binding.runtime.api.ListRuntimeType;
 import org.opendaylight.yangtools.binding.runtime.api.RuntimeType;
 import org.opendaylight.yangtools.yang.common.Ordering;
-import org.opendaylight.yangtools.yang.model.api.stmt.KeyEffectiveStatement;
 import org.opendaylight.yangtools.yang.model.api.stmt.ListEffectiveStatement;
 import org.opendaylight.yangtools.yang.model.util.SchemaInferenceStack;
 
@@ -36,9 +35,8 @@ final class ListGenerator extends CompositeSchemaTreeGenerator<ListEffectiveStat
 
     ListGenerator(final ListEffectiveStatement statement, final AbstractCompositeGenerator<?, ?> parent) {
         super(statement, parent);
-        keyGen = statement.findFirstEffectiveSubstatement(KeyEffectiveStatement.class)
-            .map(key -> new KeyGenerator(key, parent, this))
-            .orElse(null);
+        final var key = statement.keyStatement();
+        keyGen = key != null ? new KeyGenerator(key, parent, this) : null;
     }
 
     @Override
