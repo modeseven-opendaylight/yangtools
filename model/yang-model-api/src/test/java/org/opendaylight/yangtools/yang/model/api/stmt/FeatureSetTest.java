@@ -68,4 +68,17 @@ class FeatureSetTest {
         assertEquals(set.hashCode(), other.hashCode());
         assertEquals(set, other);
     }
+
+    @Test
+    void explicitToString() {
+        assertEquals("Explicit{features=[(foo)foo, (bar)foo]}", FeatureSet.of(FOO_FOO, BAR_FOO).toString());
+    }
+
+    @Test
+    void sparseToString() {
+        assertEquals("Sparse{features={QNameModule{ns=foo}=[foo]}}", FeatureSet.builder()
+            .addModuleFeatures(FOO_FOO.getModule(), Set.of(FOO_FOO.getLocalName()))
+            .build()
+            .toString());
+    }
 }
