@@ -8,14 +8,12 @@
 package org.opendaylight.yangtools.binding.reflect;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkState;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import org.eclipse.jdt.annotation.NonNull;
@@ -74,8 +72,8 @@ public final class BindingReflections {
      * @return Instance of {@link YangModuleInfo} associated with model, from which this class was derived.
      */
     private static @NonNull YangModuleInfo getModuleInfo(final Class<?> cls) {
-        final String potentialClassName = Naming.rootToServicePackageName(cls.getPackage().getName())
-            + '.' + Naming.MODULE_INFO_CLASS_NAME;
+        final var potentialClassName = Naming.rootToServicePackageName(cls.getPackage().getName()) + '.'
+            + Naming.MODULE_INFO_CLASS_NAME;
         final Class<?> moduleInfoClass;
         try {
             moduleInfoClass = cls.getClassLoader().loadClass(potentialClassName);
@@ -83,15 +81,19 @@ public final class BindingReflections {
             throw new IllegalStateException("Failed to load " + potentialClassName, e);
         }
 
-        final Object infoInstance;
+        final Object instanceObj;
         try {
-            infoInstance = moduleInfoClass.getMethod("getInstance").invoke(null);
-        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-            throw new IllegalStateException("Failed to get instance of " + moduleInfoClass, e);
+            instanceObj = moduleInfoClass.getDeclaredField(Naming.MODULE_INFO_INSTANCE_FIELD_NAME).get(null);
+        } catch (IllegalAccessException e) {
+            throw new IllegalStateException("Failed to read instance field in " + moduleInfoClass, e);
+        } catch (NoSuchFieldException e) {
+            throw new IllegalStateException("Failed to find instance field in " + moduleInfoClass, e);
         }
 
-        checkState(infoInstance instanceof YangModuleInfo, "Unexpected instance %s", infoInstance);
-        return (YangModuleInfo) infoInstance;
+        if (!(instanceObj instanceof YangModuleInfo moduleInfo)) {
+            throw new IllegalStateException("Unexpected instance " + instanceObj);
+        }
+        return moduleInfo;
     }
 
     /**

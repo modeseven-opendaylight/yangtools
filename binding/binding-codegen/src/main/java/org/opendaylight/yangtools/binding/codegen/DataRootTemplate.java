@@ -43,7 +43,7 @@ final class DataRootTemplate extends InterfaceTemplate {
             +  '@' + nonNullByDefault + '\n'
             // FIXME: YANGTOOLS-1808: use importedName() on rootMetaType
             +  rootMetaRaw + '<' + type + "> META = new " + rootMetaRaw + "<>(" + type + ".class, " + moduleInfo
-                + ".INSTANCE);\n";
+                + '.' + Naming.MODULE_INFO_INSTANCE_FIELD_NAME + ");\n";
     }
 
     @Override
