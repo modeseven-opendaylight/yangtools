@@ -7,8 +7,11 @@
  */
 package org.opendaylight.yangtools.yang.model.api.stmt;
 
+import com.google.common.annotations.Beta;
+import com.google.common.base.VerifyException;
 import org.eclipse.jdt.annotation.NonNull;
 import org.opendaylight.yangtools.yang.common.XMLNamespace;
+import org.opendaylight.yangtools.yang.model.api.meta.DeclaredStatement;
 import org.opendaylight.yangtools.yang.model.api.meta.EffectiveStatement;
 import org.opendaylight.yangtools.yang.model.api.meta.StatementDefinition;
 
@@ -16,6 +19,28 @@ import org.opendaylight.yangtools.yang.model.api.meta.StatementDefinition;
  * Effective representation of a {@code namespace} statement.
  */
 public interface NamespaceEffectiveStatement extends EffectiveStatement<XMLNamespace, @NonNull NamespaceStatement> {
+    /**
+     * An {@link EffectiveStatement} that is a parent of a single {@link TypeEffectiveStatement}.
+     *
+     * @param <A> Argument type
+     * @param <D> Class representing declared version of this statement.
+     * @since 15.0.1
+     */
+    @Beta
+    interface MandatoryIn<A, D extends DeclaredStatement<A>> extends EffectiveStatement<A, D> {
+        /**
+         * Return this statement's {@code namespace} substatement.
+         *
+         * @implSpec
+         *      Default implementation uses {@link #findFirstEffectiveSubstatement(Class)} and throws a
+         *      {@link VerifyException} if a matching substatement is not found.
+         * @return A {@link TypeEffectiveStatement}
+         */
+        default @NonNull NamespaceEffectiveStatement namespaceStatement() {
+            return DefaultMethodHelpers.verifySubstatement(this, NamespaceEffectiveStatement.class);
+        }
+    }
+
     @Override
     default StatementDefinition<XMLNamespace, @NonNull NamespaceStatement, ?> statementDefinition() {
         return NamespaceStatement.DEF;

@@ -25,6 +25,7 @@ import org.opendaylight.yangtools.yang.model.api.meta.StatementDefinition;
 public non-sealed interface ModuleEffectiveStatement
     extends DataTreeAwareEffectiveStatement<Unqualified, @NonNull ModuleStatement>,
             RootEffectiveStatement<@NonNull ModuleStatement>,
+            NamespaceEffectiveStatement.MandatoryIn<Unqualified, @NonNull ModuleStatement>,
             PrefixEffectiveStatement.MandatoryIn<Unqualified, @NonNull ModuleStatement>,
             TypedefEffectiveStatement.MultipleIn<Unqualified, @NonNull ModuleStatement>,
             DataContainerCompat<Unqualified, @NonNull ModuleStatement>,
@@ -91,17 +92,6 @@ public non-sealed interface ModuleEffectiveStatement
     @Deprecated(since = "15.0.0", forRemoval = true)
     default @NonNull NamespaceEffectiveStatement namespace() {
         return namespaceStatement();
-    }
-
-    /**
-     * {@return this statement's {@code namespace} substatement}
-     * @since 15.0.0
-     * @implSpec
-     *      Default implementation uses {@link #findFirstEffectiveSubstatement(Class)} and throws a
-     *      {@link VerifyException} if a matching substatement is not found.
-     */
-    default @NonNull NamespaceEffectiveStatement namespaceStatement() {
-        return DefaultMethodHelpers.verifySubstatement(this, NamespaceEffectiveStatement.class);
     }
 
     /**

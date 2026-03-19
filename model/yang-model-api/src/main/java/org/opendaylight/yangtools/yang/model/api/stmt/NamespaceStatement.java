@@ -27,6 +27,7 @@ public interface NamespaceStatement extends DeclaredStatement<XMLNamespace> {
      * A {@link DeclaredStatement} that is a parent of a single {@link NamespaceStatement}.
      * @param <A> Argument type ({@link Empty} if statement does not have argument.)
      */
+    // FIXME: 16.0.0: the sole user of this wants MandatoryIn
     @Beta
     interface OptionalIn<A> extends DeclaredStatement<A> {
         /**
