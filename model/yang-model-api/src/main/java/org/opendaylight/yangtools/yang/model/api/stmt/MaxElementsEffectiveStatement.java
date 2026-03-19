@@ -7,7 +7,12 @@
  */
 package org.opendaylight.yangtools.yang.model.api.stmt;
 
+import com.google.common.annotations.Beta;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
+import org.opendaylight.yangtools.yang.model.api.meta.DeclaredStatement;
 import org.opendaylight.yangtools.yang.model.api.meta.EffectiveStatement;
 import org.opendaylight.yangtools.yang.model.api.meta.StatementDefinition;
 
@@ -16,6 +21,47 @@ import org.opendaylight.yangtools.yang.model.api.meta.StatementDefinition;
  */
 public interface MaxElementsEffectiveStatement
         extends EffectiveStatement<MaxElementsArgument, @NonNull MaxElementsStatement> {
+    /**
+     * An {@link EffectiveStatement} that is a parent of a single {@link MaxElementsEffectiveStatement}.
+     *
+     * @param <A> Argument type
+     * @param <D> Class representing declared version of this statement.
+     * @since 15.0.1
+     */
+    @Beta
+    interface OptionalIn<A, D extends DeclaredStatement<A>> extends EffectiveStatement<A, D> {
+        /**
+         * {@return the {@code MaxElementsEffectiveStatement} or {@code null} if not present}
+         */
+        default @Nullable MaxElementsEffectiveStatement maxElementsStatement() {
+            for (var stmt : effectiveSubstatements()) {
+                if (stmt instanceof MaxElementsEffectiveStatement maxElements) {
+                    return maxElements;
+                }
+            }
+            return null;
+        }
+
+        /**
+         * {@return an optional {@code MaxElementsEffectiveStatement}}
+         */
+        default @NonNull Optional<MaxElementsEffectiveStatement> findMaxElementsStatement() {
+            return Optional.ofNullable(maxElementsStatement());
+        }
+
+        /**
+         * {@return the {@code MaxElementsEffectiveStatement}}
+         * @throws NoSuchElementException if not present
+         */
+        default @NonNull MaxElementsEffectiveStatement getMaxElementsStatement() {
+            final var maxElements = maxElementsStatement();
+            if (maxElements == null) {
+                throw new NoSuchElementException("No max-elements statement present in " + this);
+            }
+            return maxElements;
+        }
+    }
+
     @Override
     default StatementDefinition<MaxElementsArgument, @NonNull MaxElementsStatement, ?> statementDefinition() {
         return MaxElementsStatement.DEF;
