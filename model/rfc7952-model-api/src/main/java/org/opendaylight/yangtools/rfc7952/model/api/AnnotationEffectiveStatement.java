@@ -17,6 +17,7 @@ import org.opendaylight.yangtools.yang.model.api.meta.TypeDefinitionCompat;
 import org.opendaylight.yangtools.yang.model.api.stmt.DescriptionEffectiveStatement;
 import org.opendaylight.yangtools.yang.model.api.stmt.ReferenceEffectiveStatement;
 import org.opendaylight.yangtools.yang.model.api.stmt.TypeEffectiveStatement;
+import org.opendaylight.yangtools.yang.model.api.stmt.UnitsEffectiveStatement;
 
 /**
  * Effective statement representation of 'annotation' extension defined in
@@ -26,6 +27,7 @@ public interface AnnotationEffectiveStatement
         extends DescriptionEffectiveStatement.OptionalIn<AnnotationName, @NonNull AnnotationStatement>,
                 ReferenceEffectiveStatement.OptionalIn<AnnotationName, @NonNull AnnotationStatement>,
                 TypeEffectiveStatement.MandatoryIn<AnnotationName, @NonNull AnnotationStatement>,
+                UnitsEffectiveStatement.OptionalIn<AnnotationName, @NonNull AnnotationStatement>,
                 TypeDefinitionCompat<AnnotationName, @NonNull AnnotationStatement> {
     /**
      * An entity capable of finding {@link AnnotationEffectiveStatement}s.

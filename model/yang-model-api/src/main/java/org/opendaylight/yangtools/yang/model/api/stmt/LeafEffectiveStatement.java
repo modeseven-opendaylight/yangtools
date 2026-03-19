@@ -20,6 +20,7 @@ public non-sealed interface LeafEffectiveStatement extends DataTreeEffectiveStat
         DescriptionEffectiveStatement.OptionalIn<QName, @NonNull LeafStatement>,
         ReferenceEffectiveStatement.OptionalIn<QName, @NonNull LeafStatement>,
         TypeEffectiveStatement.MandatoryIn<QName, @NonNull LeafStatement>,
+        UnitsEffectiveStatement.OptionalIn<QName, @NonNull LeafStatement>,
         DataSchemaCompat<QName, @NonNull LeafStatement> {
     @Override
     default StatementDefinition<QName, @NonNull LeafStatement, ?> statementDefinition() {

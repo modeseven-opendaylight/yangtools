@@ -16,6 +16,7 @@ import org.opendaylight.yangtools.yang.model.api.stmt.IfFeatureStatement;
 import org.opendaylight.yangtools.yang.model.api.stmt.ReferenceStatement;
 import org.opendaylight.yangtools.yang.model.api.stmt.StatusStatement;
 import org.opendaylight.yangtools.yang.model.api.stmt.TypeStatement;
+import org.opendaylight.yangtools.yang.model.api.stmt.UnitsStatement;
 
 /**
  * Declared statement representation of 'annotation' extension defined in
@@ -23,7 +24,10 @@ import org.opendaylight.yangtools.yang.model.api.stmt.TypeStatement;
  */
 public interface AnnotationStatement extends DescriptionStatement.OptionalIn<AnnotationName>,
         IfFeatureStatement.MultipleIn<AnnotationName>, ReferenceStatement.OptionalIn<AnnotationName>,
-        StatusStatement.OptionalIn<AnnotationName>, TypeStatement.OptionalIn<AnnotationName> {
+        StatusStatement.OptionalIn<AnnotationName>,
+        // FIXME: this is not accurate
+        TypeStatement.OptionalIn<AnnotationName>,
+        UnitsStatement.OptionalIn<AnnotationName> {
     /**
      * The definition of {@code nc:get-filter-element-attributes} statement.
      *
