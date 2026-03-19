@@ -14,13 +14,19 @@ import org.opendaylight.yangtools.yang.common.AnnotationName;
 import org.opendaylight.yangtools.yang.model.api.EffectiveModelContext;
 import org.opendaylight.yangtools.yang.model.api.meta.StatementDefinition;
 import org.opendaylight.yangtools.yang.model.api.meta.TypeDefinitionCompat;
+import org.opendaylight.yangtools.yang.model.api.stmt.DescriptionEffectiveStatement;
+import org.opendaylight.yangtools.yang.model.api.stmt.ReferenceEffectiveStatement;
+import org.opendaylight.yangtools.yang.model.api.stmt.TypeEffectiveStatement;
 
 /**
  * Effective statement representation of 'annotation' extension defined in
  * <a href="https://www.rfc-editor.org/rfc/rfc7952">RFC7952</a>.
  */
 public interface AnnotationEffectiveStatement
-        extends TypeDefinitionCompat<AnnotationName, @NonNull AnnotationStatement> {
+        extends DescriptionEffectiveStatement.OptionalIn<AnnotationName, @NonNull AnnotationStatement>,
+                ReferenceEffectiveStatement.OptionalIn<AnnotationName, @NonNull AnnotationStatement>,
+                TypeEffectiveStatement.MandatoryIn<AnnotationName, @NonNull AnnotationStatement>,
+                TypeDefinitionCompat<AnnotationName, @NonNull AnnotationStatement> {
     /**
      * An entity capable of finding {@link AnnotationEffectiveStatement}s.
      */
