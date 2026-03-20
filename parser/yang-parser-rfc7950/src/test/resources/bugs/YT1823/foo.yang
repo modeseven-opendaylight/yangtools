@@ -1,0 +1,9 @@
+module foo {
+  namespace foo;
+  prefix foo;
+
+  leaf foo {
+    type string;
+    mandatory TRUE;
+  }
+}
