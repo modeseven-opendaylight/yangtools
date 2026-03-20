@@ -7,16 +7,27 @@
  */
 package org.opendaylight.yangtools.rfc6536.parser;
 
+import static java.util.Objects.requireNonNull;
+
 import com.google.common.collect.ImmutableList;
 import org.eclipse.jdt.annotation.NonNull;
 import org.opendaylight.yangtools.rfc6536.model.api.DefaultDenyWriteStatement;
+import org.opendaylight.yangtools.yang.common.Empty;
 import org.opendaylight.yangtools.yang.model.api.meta.DeclaredStatement;
+import org.opendaylight.yangtools.yang.model.api.meta.StatementDefinition;
 import org.opendaylight.yangtools.yang.model.spi.meta.AbstractDeclaredStatement.WithoutArgument.WithSubstatements;
 
 final class DefaultDenyWriteStatementImpl extends WithSubstatements implements DefaultDenyWriteStatement {
-    static final @NonNull DefaultDenyWriteStatementImpl EMPTY = new DefaultDenyWriteStatementImpl(ImmutableList.of());
+    private final @NonNull StatementDefinition<Empty, ?, ?> statementDefinition;
 
-    DefaultDenyWriteStatementImpl(final ImmutableList<? extends DeclaredStatement<?>> substatements) {
+    DefaultDenyWriteStatementImpl(final ImmutableList<? extends DeclaredStatement<?>> substatements,
+            final @NonNull StatementDefinition<Empty, ?, ?> statementDefinition) {
         super(substatements);
+        this.statementDefinition = requireNonNull(statementDefinition);
+    }
+
+    @Override
+    public StatementDefinition<Empty, ?, ?> statementDefinition() {
+        return statementDefinition;
     }
 }

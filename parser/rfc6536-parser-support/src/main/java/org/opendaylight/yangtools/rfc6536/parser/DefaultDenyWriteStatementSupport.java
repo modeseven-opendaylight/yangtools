@@ -7,26 +7,44 @@
  */
 package org.opendaylight.yangtools.rfc6536.parser;
 
+import static java.util.Objects.requireNonNull;
+
 import com.google.common.collect.ImmutableList;
+import org.eclipse.jdt.annotation.NonNull;
 import org.opendaylight.yangtools.rfc6536.model.api.DefaultDenyWriteEffectiveStatement;
 import org.opendaylight.yangtools.rfc6536.model.api.DefaultDenyWriteStatement;
 import org.opendaylight.yangtools.yang.common.Empty;
 import org.opendaylight.yangtools.yang.model.api.meta.DeclarationReference;
 import org.opendaylight.yangtools.yang.model.api.meta.DeclaredStatement;
 import org.opendaylight.yangtools.yang.model.api.meta.EffectiveStatement;
+import org.opendaylight.yangtools.yang.model.api.meta.StatementDefinition;
 import org.opendaylight.yangtools.yang.parser.api.YangParserConfiguration;
 import org.opendaylight.yangtools.yang.parser.spi.meta.AbstractEmptyStatementSupport;
 import org.opendaylight.yangtools.yang.parser.spi.meta.BoundStmtCtx;
 import org.opendaylight.yangtools.yang.parser.spi.meta.EffectiveStmtCtx.Current;
 import org.opendaylight.yangtools.yang.parser.spi.meta.SubstatementValidator;
 
-public final class DefaultDenyWriteStatementSupport
+final class DefaultDenyWriteStatementSupport
         extends AbstractEmptyStatementSupport<DefaultDenyWriteStatement, DefaultDenyWriteEffectiveStatement> {
     private static final SubstatementValidator VALIDATOR =
         SubstatementValidator.builder(DefaultDenyWriteStatement.DEF).build();
 
-    public DefaultDenyWriteStatementSupport(final YangParserConfiguration config) {
+    private final @NonNull StatementDefinition<Empty, DefaultDenyWriteStatement, DefaultDenyWriteEffectiveStatement>
+        definition;
+
+    DefaultDenyWriteStatementSupport(final YangParserConfiguration config,
+            final StatementDefinition<Empty, DefaultDenyWriteStatement, DefaultDenyWriteEffectiveStatement> def) {
         super(DefaultDenyWriteStatement.DEF, StatementPolicy.contextIndependent(), config, VALIDATOR);
+        definition = requireNonNull(def);
+    }
+
+    DefaultDenyWriteStatementSupport(final YangParserConfiguration config) {
+        this(config, DefaultDenyWriteStatement.DEF);
+    }
+
+    @Override
+    public StatementDefinition<Empty, DefaultDenyWriteStatement, DefaultDenyWriteEffectiveStatement> definition() {
+        return definition;
     }
 
     // FIXME: not implemented:
@@ -43,8 +61,7 @@ public final class DefaultDenyWriteStatementSupport
     @Override
     protected DefaultDenyWriteStatement createDeclared(final BoundStmtCtx<Empty> ctx,
             final ImmutableList<DeclaredStatement<?>> substatements) {
-        return substatements.isEmpty() ? DefaultDenyWriteStatementImpl.EMPTY
-            : new DefaultDenyWriteStatementImpl(substatements);
+        return new DefaultDenyWriteStatementImpl(substatements, definition);
     }
 
     @Override
@@ -56,6 +73,6 @@ public final class DefaultDenyWriteStatementSupport
     @Override
     protected DefaultDenyWriteEffectiveStatement createEffective(final Current<Empty, DefaultDenyWriteStatement> stmt,
             final ImmutableList<? extends EffectiveStatement<?, ?>> substatements) {
-        return new DefaultDenyWriteEffectiveStatementImpl(stmt.declared(), substatements);
+        return new DefaultDenyWriteEffectiveStatementImpl(stmt.declared(), substatements, definition);
     }
 }

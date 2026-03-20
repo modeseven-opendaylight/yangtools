@@ -7,18 +7,30 @@
  */
 package org.opendaylight.yangtools.rfc6536.parser;
 
+import static java.util.Objects.requireNonNull;
+
 import com.google.common.collect.ImmutableList;
 import org.eclipse.jdt.annotation.NonNull;
 import org.opendaylight.yangtools.rfc6536.model.api.DefaultDenyAllEffectiveStatement;
 import org.opendaylight.yangtools.rfc6536.model.api.DefaultDenyAllStatement;
 import org.opendaylight.yangtools.yang.common.Empty;
 import org.opendaylight.yangtools.yang.model.api.meta.EffectiveStatement;
+import org.opendaylight.yangtools.yang.model.api.meta.StatementDefinition;
 import org.opendaylight.yangtools.yang.model.spi.meta.AbstractDeclaredEffectiveStatement.DefaultArgument.WithSubstatements;
 
 final class DefaultDenyAllEffectiveStatementImpl extends WithSubstatements<Empty, @NonNull DefaultDenyAllStatement>
         implements DefaultDenyAllEffectiveStatement {
+    private final @NonNull StatementDefinition<Empty, @NonNull DefaultDenyAllStatement, ?> statementDefinition;
+
     DefaultDenyAllEffectiveStatementImpl(final @NonNull DefaultDenyAllStatement declared,
-            final @NonNull ImmutableList<? extends EffectiveStatement<?, ?>> substatements) {
+            final @NonNull ImmutableList<? extends EffectiveStatement<?, ?>> substatements,
+            final @NonNull StatementDefinition<Empty, @NonNull DefaultDenyAllStatement, ?> statementDefinition) {
         super(declared, substatements);
+        this.statementDefinition = requireNonNull(statementDefinition);
+    }
+
+    @Override
+    public StatementDefinition<Empty, @NonNull DefaultDenyAllStatement, ?> statementDefinition() {
+        return statementDefinition;
     }
 }
